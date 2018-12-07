@@ -1,0 +1,27 @@
+1.resource文件夹存放需要转码的源文件
+2.将需要的格式输入到request.txt，每一行对应一种；
+    形如：h264_High@L3.1_1280x720_30fps_AAC-LC_160kbps_44.1kHz.avi
+    即：编码格式_视频质量(仅支持H264)_分辨率_帧率_音频编码格式_音频比特率_音频采样率.视频封装格式
+
+    视频：
+    编码格式        封装格式
+    rv20             rm
+    h263             avi/mp4/f4v/mkv/3gp
+    h264             f4v/mov/flv/3g2/m2ts/ts/mp4/mkv
+    h265             mp4/ts/mkv/mov/m2ts
+    jpeg             mov/mp4
+    mpeg2            mov/mp4/avi/3gp
+    mpeg4            avi/mkv/mov/3gp/3g2
+    flv1             flv/avi
+    wmv1             wmv/avi/asf
+    wmv2             wmv/avi/asf
+    vp8              flv/webm/mkv
+    vp9              flv/webm/mkv
+    注：flv1即是Sorenson Spark Video
+    以上编码格式均不支持rmvb的编码，rmvb可以解码，tp编码解码均不支持   
+
+    音频：
+    AAC、AC3、ADPCM、MP2、MP3、SPEEX、WMA、VORBIS
+
+3.运行程序ffmpeg.py按要求转码
+4.转出结果在result文件夹相应视频编码格式命名的文件夹下，如：result/H264

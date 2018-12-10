@@ -1,3 +1,15 @@
+需要的环境：python3、ffmpeg
+    ffmpeg：
+        第一步：添加源。
+        sudo add-apt-repository ppa:djcj/hybrid
+        第二步：更新源。
+        sudo apt-get update
+        第三步：下载安装。
+        sudo apt-get install ffmpeg
+        查看是否安装成功：
+        ffmpeg -version
+
+使用：        
 1.resource文件夹存放需要转码的源文件
 2.将需要的格式输入到request.txt，每一行对应一种；
     形如：h264_High@L3.1_1280x720_30fps_AAC-LC_160kbps_44.1kHz.avi

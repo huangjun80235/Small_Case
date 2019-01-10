@@ -1,13 +1,42 @@
-需要的环境：python3、ffmpeg
-    ffmpeg：
-        第一步：添加源。
-        sudo add-apt-repository ppa:djcj/hybrid
-        第二步：更新源。
-        sudo apt-get update
-        第三步：下载安装。
-        sudo apt-get install ffmpeg
-        查看是否安装成功：
-        ffmpeg -version
+*加入HE-AACV1、HE-AACV2、AAC-ELD音频支持
+
+下载ffmpeg编译的版本
+vp8/vp9
+wget -O libvpx.zip https://codeload.github.com/webmproject/libvpx/zip/master
+./configure --enable-shared --enable-static
+make 
+sudo make install
+
+x264
+git clone git://git.videolan.org/x264.git
+cd x264*
+./configure --enable-shared --enable-static
+make 
+sudo make install
+make clean
+
+libfdk-aac (加入的音频支持aac-eld等)
+https://sourceforge.net/projects/opencore-amr/files/
+
+
+
+x265
+wget https://bitbucket.org/multicoreware/x265/downloads/x265_2.9.tar.gz
+cd x265/build/linux
+cmake ../../source
+make
+sudo make install
+make clean
+
+ffmpeg编译升级，
+    1. ./configure --......
+    2. make clean
+    3. make
+    4. sudo make install
+    5.在/etc/ld.so.conf文件中添加一行/etc/ld.so.conf，当然是用root用户啦。然后执行ldconfig命令使得刚才的修改生效，完了再运行ffmpeg的转码命令试试，可以了吧。
+    注:在1中我使用的./configure --enable-libvpx --enable-libvo-amrwbenc --enable-libopencore-amrwb --enable-libopencore-amrnb --enable-libmp3lame --enable-libx264 --enable-libx265 --enable-gpl  --enable-libxvid --enable-version3 --enable-libfdk-aac --enable-nonfree
+    但是结果发现amrwb不行
+
 
 使用：        
 1.resource文件夹存放需要转码的源文件
@@ -18,22 +47,22 @@
     视频：
     编码格式        封装格式
     rv20             rm
-    h263             avi/mp4/f4v/mkv/3gp
-    h264             f4v/mov/flv/3g2/m2ts/ts/mp4/mkv
-    h265             mp4/ts/mkv/mov/m2ts
-    jpeg             mov/mp4
-    mpeg2            mov/mp4/avi/3gp
-    mpeg4            avi/mkv/mov/3gp/3g2
-    flv1             flv/avi
-    wmv1             wmv/avi/asf
-    wmv2             wmv/avi/asf
-    vp8              flv/webm/mkv
-    vp9              flv/webm/mkv
+    h263             avi/f4v/mkv/3gp/mov/asf/wmv/
+    h264             3gp/avi/mkv/flv/mov/mp4/ts/asf/wmv
+    h265             mp4/ts/mkv/mov
+    jpeg             avi/asf/mov/mp4/mkv/wmv
+    mpeg2            mov/mp4/avi/asf/mkv/ts/mpg/wmv
+    mpeg4            3gp/asf/avi/mkv/mov/mp4/ts/wmv
+    flv1             asf/flv/avi/mkv/wmv
+    wmv1             wmv/avi/asf/mkv/
+    wmv2             wmv/avi/asf/mkv
+    vp8              webm/mkv/asf/avi/wmv
+    vp9              webm/mkv/asf/avi/mp4/wmv
     注：flv1即是Sorenson Spark Video
-    以上编码格式均不支持rmvb的编码，rmvb可以解码，tp编码解码均不支持   
+    以上编码格式均不支持rmvb的编码，rmvb可以解码，tp编码解码均不支持，h264封装3gp仅支持aac的音频编码   
 
     音频：
-    AAC、AC3、ADPCM、MP2、MP3、SPEEX、WMA、VORBIS
+    AAC、HE-AACV1、HE-AACV2、AAC-ELD(不支持32k采样率)、AC3、ADPCM、MP2、MP3、SPEEX、WMA、VORBIS
 
 3.运行程序ffmpeg.py按要求转码
-4.转出结果在result文件夹相应视频编码格式命名的文件夹下，如：result/H264
+4.转出结果在result文件夹相应视频封装格式/编码格式命名的文件夹下，如：result/MP4/H264
